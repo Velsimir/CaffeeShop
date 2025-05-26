@@ -26,6 +26,8 @@ namespace Game.Scripts.GameLogic.Player
             
             _inputHandler.MoveButtonsPressed += ReadMovementVector;
         }
+        
+        public bool IsMoving => _moveInput != Vector2.zero;
 
         public void Update(float deltaTime)
         {

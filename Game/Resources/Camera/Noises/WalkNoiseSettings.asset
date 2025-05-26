@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3480319087e4d94834b21cc2ade173e, type: 3}
-  m_Name: PlayerCharacteristic
+  m_Script: {fileID: 11500000, guid: 3b7ac08ed89d43d29f59871491344cb8, type: 3}
+  m_Name: WalkNoiseSettings
   m_EditorClassIdentifier: 
-  <Speed>k__BackingField: 3
-  <MouseSensitivityX>k__BackingField: 0.1
-  <MouseSensitivityY>k__BackingField: 0.1
+  _amplitude: 0.003
+  _frequency: 10
+  _timeToReturnToStartPosition: 0.1
