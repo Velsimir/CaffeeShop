@@ -17,7 +17,7 @@ namespace Game.Scripts.Infrastructure.ZenjectInstallers
         {
             Container.Bind<CharacterController>().FromInstance(_playerCharacterController);
             Container.Bind<IInputHandler>().To<InputHandler>().AsSingle();
-            Container.Bind<PlayerMovement>().To<PlayerMovement>().AsSingle();
+            Container.Bind<IPlayerMovement>().To<PlayerMovement>().AsSingle();
             Container.Bind<PlayerCameraRotation>().To<PlayerCameraRotation>().AsSingle();
             Container.Bind<PlayerCharacteristicData>().FromInstance(_playerCharacteristicData);
             Container.Bind<CinemachineCamera>().FromInstance(_playerCamera);

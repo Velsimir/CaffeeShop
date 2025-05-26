@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Scripts.GameLogic.Player
 {
-    public class PlayerMovement : IUpdatable, IDisposable
+    public class PlayerMovement : IPlayerMovement, IUpdatable, IDisposable
     {
         private readonly CharacterController _characterController;
         private readonly IInputHandler _inputHandler;
