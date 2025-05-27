@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Scripts.GameLogic.CameraLogic.Noises;
 using Game.Scripts.GameLogic.Player;
+using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
@@ -9,19 +10,20 @@ namespace Game.Scripts.GameLogic.CameraLogic
 {
     public class CameraNoiseController : MonoBehaviour
     {
-        [SerializeField] private Transform _cameraTarget;
         [SerializeField] private List<CameraNoiseSettings> _noisePresets;
         
         private readonly List<ICameraNoise> _activeNoises = new();
         
         private Vector3 _initialPosition;
+        private CinemachineCamera _cameraTarget;
 
         public Func<bool> WalkCondition { get; set; } = () => false;
         
         [Inject]
-        private void Construct(IPlayerMovement playerMovement)
+        private void Construct(IPlayerMovement playerMovement, CinemachineCamera cinemachineCamera)
         {
-            _initialPosition = _cameraTarget.localPosition;
+            _cameraTarget = cinemachineCamera;
+            _initialPosition = _cameraTarget.transform.localPosition;
 
             WalkCondition = () => playerMovement.IsMoving;
             
@@ -49,8 +51,7 @@ namespace Game.Scripts.GameLogic.CameraLogic
                 }
             }
             
-            _cameraTarget.localPosition = _initialPosition + offset;
-        }
+            _cameraTarget.transform.localPosition = _initialPosition + offset; }
 
         public void RegisterNoise(ICameraNoise noise)
         {

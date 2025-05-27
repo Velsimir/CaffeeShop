@@ -8,6 +8,7 @@ public class InputHandler : IInputHandler, IDisposable
 
     public event Action<Vector2> MoveButtonsPressed;
     public event Action<Vector2> RotateMousePressed;
+    public event Action InteractionButtonReleased;
 
     public InputHandler()
     {
@@ -19,6 +20,8 @@ public class InputHandler : IInputHandler, IDisposable
 
         _inputSystem.Player.Look.performed += HandleRotateDirection;
         _inputSystem.Player.Look.canceled += HandleRotateDirection;
+
+        _inputSystem.Player.Interact.started += HandleInteractionButton;
     }
 
     public void Dispose()
@@ -29,7 +32,14 @@ public class InputHandler : IInputHandler, IDisposable
         _inputSystem.Player.Look.performed -= HandleRotateDirection;
         _inputSystem.Player.Look.canceled -= HandleRotateDirection;
         
+        _inputSystem.Player.Interact.started -= HandleInteractionButton;
+        
         _inputSystem.Disable();
+    }
+
+    private void HandleInteractionButton(InputAction.CallbackContext obj)
+    {
+        InteractionButtonReleased?.Invoke();
     }
 
     private void HandleMovementDirection(InputAction.CallbackContext obj)
