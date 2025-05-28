@@ -1,3 +1,4 @@
+using System;
 using Game.Scripts.GameLogic.PlayerLogic;
 using UnityEngine;
 
@@ -20,18 +21,17 @@ namespace Game.Scripts.GameLogic.CupLogic
 
         public void Take(Transform takerParent)
         {
-            _rigidbody.isKinematic = true;
             _transform.SetParent(takerParent);
-            _transform.localPosition = Vector3.zero;
             CanBeTaken = false;
             _transform.localRotation = _initialRotation;
+            _rigidbody.freezeRotation = true;
         }
 
         public void Drop()
         {
-            _rigidbody.isKinematic = false;
             _transform.SetParent(null);
-            CanBeTaken = true; 
+            CanBeTaken = true;
+            _rigidbody.freezeRotation = false;
         }
 
         public void ActivateFocuse()

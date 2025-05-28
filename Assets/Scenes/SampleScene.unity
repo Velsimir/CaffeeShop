@@ -274,6 +274,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4408337114150991302, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 358199094139782385, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
       propertyPath: m_Name
       value: Papper Cup 8 OZ
@@ -325,7 +329,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 358199094139782385, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 639218906}
   m_SourcePrefab: {fileID: 100100000, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
 --- !u!114 &313311764 stripped
 MonoBehaviour:
@@ -709,6 +716,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582335005}
   m_CullTransparentMesh: 1
+--- !u!1 &639218899 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 358199094139782385, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
+  m_PrefabInstance: {fileID: 285009461}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &639218901 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: -4408337114150991302, guid: 03164cb0a41de5c47b9857560f22cb2d, type: 3}
+  m_PrefabInstance: {fileID: 285009461}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &639218906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639218899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba24ae22e6bc65b4ab4a7d2112d8192b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 639218901}
+  _followForce: 500
 --- !u!1 &750545019
 GameObject:
   m_ObjectHideFlags: 0
