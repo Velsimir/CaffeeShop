@@ -1,11 +1,10 @@
-using System;
 using Game.Scripts.GameLogic.PlayerLogic;
 using UnityEngine;
 
 namespace Game.Scripts.GameLogic.CupLogic
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Cup : MonoBehaviour, ITakable
+    public class Cap : MonoBehaviour, ITakable
     {
         [SerializeField] private Transform _transform;
         [SerializeField] private Rigidbody _rigidbody;
@@ -13,7 +12,7 @@ namespace Game.Scripts.GameLogic.CupLogic
         private Quaternion _initialRotation;
 
         public bool CanBeTaken { get; private set; } = true;
-
+        
         private void Awake()
         {
             _initialRotation = _transform.rotation;
