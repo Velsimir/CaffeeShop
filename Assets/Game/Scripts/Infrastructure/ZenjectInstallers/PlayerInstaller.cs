@@ -8,6 +8,7 @@ namespace Game.Scripts.Infrastructure.ZenjectInstallers
 {
     public class PlayerInstaller : MonoInstaller
     {
+        //TODO добавить возможность загружать не из SerializeField а после загрузки из ресурсов
         [SerializeField] private CharacterController _playerCharacterController;
         [SerializeField] private PlayerCharacteristicData _playerCharacteristicData;
         

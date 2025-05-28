@@ -1,0 +1,59 @@
+using System;
+using Game.Scripts.GameLogic.CupLogic;
+
+namespace Game.Scripts.GameLogic.PlayerLogic
+{
+    public class ObjectInteractor : IObjectInteractor, IFocusableVisitor, IDisposable
+    {
+        private readonly IInputHandler _inputHandler;
+        private readonly ITaker _objectTaker;
+        private readonly IUser _objectUser;
+        
+        public ObjectInteractor(IInputHandler inputHandler, ITaker objectTaker, IUser objectUser)
+        {
+            _inputHandler = inputHandler;
+            _objectTaker = objectTaker;
+            _objectUser = objectUser;
+            _inputHandler.InteractionButtonReleased += TryInteract;
+        }
+
+        public IFocusable CurrentFocusable { get; private set; }
+
+        public void Get(IFocusable focusable)
+        {
+            focusable.ActivateFocuse();
+            CurrentFocusable = focusable;
+        }
+
+        public void Remove(IFocusable focusable)
+        {
+            focusable.DeactivateFocuse();
+            CurrentFocusable = focusable;
+        }
+
+        public void Visit(ITakable takable)
+        {
+            _objectTaker.TryTake(takable);
+        }
+
+        public void Visit(IUsable usable)
+        {
+            _objectUser.Use(usable);
+        }
+
+        public void Dispose()
+        {
+            _inputHandler.InteractionButtonReleased -= TryInteract;
+        }
+
+        private void TryInteract()
+        {
+            if (CurrentFocusable == null)
+            {
+                return;
+            }
+            
+            CurrentFocusable.AcceptVisitor(this);
+        }
+    }
+}

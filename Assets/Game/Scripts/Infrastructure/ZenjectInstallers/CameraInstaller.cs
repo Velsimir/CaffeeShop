@@ -5,7 +5,8 @@ using Zenject;
 namespace Game.Scripts.Infrastructure.ZenjectInstallers
 {
     public class CameraInstaller : MonoInstaller
-    {        
+    {
+        //TODO добавить возможность загружать не из SerializeField а после загрузки из ресурсов
         [SerializeField] private Camera _playerCamera;
         [SerializeField] private CinemachineCamera _cinemachineCamera;
 

@@ -1,6 +1,5 @@
-using System;
+using Game.Scripts.GameLogic.PlayerLogic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Scripts.GameLogic.CupLogic
 {
@@ -21,7 +20,7 @@ namespace Game.Scripts.GameLogic.CupLogic
 
         public void Take(Transform taker)
         {
-            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
             _transform.SetParent(taker);
             CanBeTaken = false;
             _transform.rotation = _initialRotation;
@@ -29,19 +28,24 @@ namespace Game.Scripts.GameLogic.CupLogic
 
         public void Drop()
         {
-            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
             _transform.SetParent(null);
             CanBeTaken = true; 
         }
 
-        public void OnFocused()
+        public void ActivateFocuse()
         {
             Debug.Log("Cuo OnFocused");
         }
 
-        public void UnFocused()
+        public void DeactivateFocuse()
         {
             Debug.Log("Cuo UnFocused");
+        }
+
+        public void AcceptVisitor(IFocusableVisitor focusableVisitor)
+        {
+            focusableVisitor.Visit(this);
         }
     }
 }
