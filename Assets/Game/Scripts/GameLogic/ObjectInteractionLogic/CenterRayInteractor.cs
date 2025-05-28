@@ -34,26 +34,23 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             if (Physics.Raycast(_mainCamera.ViewportPointToRay(_screenCenter), out RaycastHit hit, _rayDistance, _detectableLayer))
             {
                 IFocusable focusable = hit.collider.GetComponent<IFocusable>();
-                
-                if (_currentFocusable != null)
-                {
+
+                if (focusable == _currentFocusable)
                     return;
-                }
-                
-                FocusDetected(focusable);
+
+                if (_currentFocusable != null)
+                    FocusLost();
+
+                OnFocusDetected(focusable);
             }
             else
             {
-                if (_currentFocusable == null)
-                {
-                    return;
-                }
-
-                FocusLost();
+                if (_currentFocusable != null)
+                    FocusLost();
             }
         }
 
-        private void FocusDetected(IFocusable focusable)
+        private void OnFocusDetected(IFocusable focusable)
         {
             InteractableDetected?.Invoke(focusable);
             _currentFocusable = focusable;

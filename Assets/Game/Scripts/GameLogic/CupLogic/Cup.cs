@@ -18,12 +18,13 @@ namespace Game.Scripts.GameLogic.CupLogic
             _initialRotation = _transform.rotation;
         }
 
-        public void Take(Transform taker)
+        public void Take(Transform takerParent)
         {
             _rigidbody.isKinematic = true;
-            _transform.SetParent(taker);
+            _transform.SetParent(takerParent);
+            _transform.localPosition = Vector3.zero;
             CanBeTaken = false;
-            _transform.rotation = _initialRotation;
+            _transform.localRotation = _initialRotation;
         }
 
         public void Drop()

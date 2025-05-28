@@ -1,10 +1,12 @@
+using UnityEngine;
+
 namespace Game.Scripts.GameLogic.PlayerLogic
 {
     public class ObjectUser : IUser
     {
         public void Use(IUsable usableObject)
         {
-            usableObject.TryUse();
+            Debug.Log("Пробуем использовать");
         }
     }
 }

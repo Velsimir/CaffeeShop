@@ -8,7 +8,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
         private readonly IInputHandler _inputHandler;
         private readonly ITaker _objectTaker;
         private readonly IUser _objectUser;
-        
+
         public ObjectInteractor(IInputHandler inputHandler, ITaker objectTaker, IUser objectUser)
         {
             _inputHandler = inputHandler;
@@ -28,12 +28,19 @@ namespace Game.Scripts.GameLogic.PlayerLogic
         public void Remove(IFocusable focusable)
         {
             focusable.DeactivateFocuse();
-            CurrentFocusable = focusable;
+            CurrentFocusable = null;
         }
 
         public void Visit(ITakable takable)
         {
-            _objectTaker.TryTake(takable);
+            if (_objectTaker.IsHolding)
+            {
+                _objectTaker.Drop();
+            }
+            else
+            {
+                _objectTaker.TryTake(takable);
+            }
         }
 
         public void Visit(IUsable usable)
@@ -48,12 +55,13 @@ namespace Game.Scripts.GameLogic.PlayerLogic
 
         private void TryInteract()
         {
-            if (CurrentFocusable == null)
+            if (_objectTaker.IsHolding && CurrentFocusable == null)
             {
+                _objectTaker.Drop();
                 return;
             }
-            
-            CurrentFocusable.AcceptVisitor(this);
+
+            CurrentFocusable?.AcceptVisitor(this);
         }
     }
 }

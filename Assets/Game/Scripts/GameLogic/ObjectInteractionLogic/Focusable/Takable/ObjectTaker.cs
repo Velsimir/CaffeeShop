@@ -7,7 +7,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
     {
         [SerializeField] private Transform _takePlace;
 
-        public ITakable CurrentItakable { get; private set; }
+        public ITakable CurrentTakable { get; private set; }
         public bool IsHolding { get; private set; }
 
         public void TryTake(ITakable takable)
@@ -19,7 +19,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             }
             
             takable.Take(_takePlace);
-            CurrentItakable = takable;
+            CurrentTakable = takable;
             IsHolding = true;
         }
 
@@ -31,9 +31,9 @@ namespace Game.Scripts.GameLogic.PlayerLogic
                 return;
             }
             
-            CurrentItakable.Drop();
-            CurrentItakable = null;
-            IsHolding = true;
+            CurrentTakable.Drop();
+            CurrentTakable = null;
+            IsHolding = false;
         }
     }
 }
