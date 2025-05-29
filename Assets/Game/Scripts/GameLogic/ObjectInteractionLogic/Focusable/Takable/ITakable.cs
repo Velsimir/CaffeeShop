@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.Scripts.GameLogic.CupLogic
@@ -5,6 +6,7 @@ namespace Game.Scripts.GameLogic.CupLogic
     public interface ITakable : IFocusable
     {
         public bool CanBeTaken { get; }
+        public Rigidbody Rigidbody { get; }
         public void Take(Transform takerParent);
         public void Drop();
     }
