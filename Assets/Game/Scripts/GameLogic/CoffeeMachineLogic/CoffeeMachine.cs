@@ -1,3 +1,5 @@
+using System.Collections;
+using Game.Scripts.GameLogic.CupLogic;
 using Game.Scripts.GameLogic.PlayerLogic;
 using UnityEngine;
 
@@ -5,10 +7,56 @@ namespace Game.Scripts.GameLogic
 {
     public class CoffeeMachine : MonoBehaviour, IUsable
     {
-        public bool CanBeUse { get; }
+        [SerializeField] private Transform _cupHolder;
+        [SerializeField] private TriggerObserver _cupTriggerObserver;
+        [SerializeField] private Transform _coffeeStream;
+
+        private bool _hasCap = false;
+        private CupBuilder _cupBuilder;
         
+        public bool CanBeUse { get; private set; } = false;
+
+        private void OnEnable()
+        {
+            _cupTriggerObserver.TriggerEntered += TryTakeCup;
+        }
+
+        private void OnDisable()
+        {
+            _cupTriggerObserver.TriggerEntered -= TryTakeCup;
+        }
+
+        private void TryTakeCup(Collider collider)
+        {
+            if (_hasCap)
+            {
+                return;
+            }
+            
+            _cupBuilder = collider.GetComponent<CupBuilder>();
+            
+            if (_cupBuilder != null)
+            {
+                ObjectTaker objectTaker = _cupBuilder.GetComponentInParent<ObjectTaker>();
+                
+                if (objectTaker != null && _cupBuilder.HasCap == false)
+                {
+                    objectTaker.Drop();
+                    _cupBuilder.PaperCup.Take(_cupHolder);
+                    CanBeUse = true;
+                    _hasCap = true;
+                }
+            }
+        }
+
         public void TryUse()
         {
+            if (CanBeUse == false)
+            {
+                return;
+            }
+
+            StartCoroutine(TurnOnCoffeeStream());
         }
 
         public void ActivateFocuse()
@@ -22,6 +70,18 @@ namespace Game.Scripts.GameLogic
         public void AcceptVisitor(IFocusableVisitor focusableVisitor)
         {
             focusableVisitor.Visit(this);
+        }
+
+        private IEnumerator TurnOnCoffeeStream()
+        {
+            _coffeeStream.gameObject.SetActive(true);
+            
+            yield return new WaitForSeconds(2);
+           
+            _coffeeStream.gameObject.SetActive(false);
+            _cupBuilder.FillCup();
+            CanBeUse = false;
+            _hasCap = false;
         }
     }
 }

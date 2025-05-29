@@ -5,13 +5,15 @@ namespace Game.Scripts.GameLogic.CupLogic
 {
     public class CupBuilder : MonoBehaviour
     {
+        [SerializeField] private PaperCup _paperCup;
         [SerializeField] private Transform _capHolder;
         [SerializeField] private TriggerObserver _capTriggerObserver;
+        [SerializeField] private Transform _coffee;
         
-        private bool _isFilled  = true;
-        private bool _hasCap  = false;
-        
-        public bool IsCoffeeReady => _isFilled && _hasCap;
+        private bool _isFilled = false;
+        public bool HasCap { get; private set; } = false;
+        public bool IsCoffeeReady => _isFilled && HasCap;
+        public PaperCup PaperCup => _paperCup;
 
         private void OnEnable()
         {
@@ -25,7 +27,7 @@ namespace Game.Scripts.GameLogic.CupLogic
 
         private void CatchCap(Collider collider)
         {
-            if (_hasCap == false && collider.TryGetComponent(out Cap cap))
+            if (HasCap == false && _isFilled == true && collider.TryGetComponent(out Cap cap))
             {
                 ObjectTaker objectTaker = cap.GetComponentInParent<ObjectTaker>();
                 
@@ -34,7 +36,7 @@ namespace Game.Scripts.GameLogic.CupLogic
                     objectTaker.Drop();
                     cap.Take(_capHolder);
                     cap.Rigidbody.isKinematic = true;
-                    _hasCap = true;
+                    HasCap = true;
                 }
             }
         }
@@ -42,6 +44,8 @@ namespace Game.Scripts.GameLogic.CupLogic
         public void FillCup()
         {
             _isFilled = true;
+            _coffee.gameObject.SetActive(true);
+            _paperCup.Drop();
         }
     }
 }

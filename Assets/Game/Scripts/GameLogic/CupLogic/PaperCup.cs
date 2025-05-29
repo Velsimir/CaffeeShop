@@ -24,6 +24,7 @@ namespace Game.Scripts.GameLogic.CupLogic
         {
             _transform.SetParent(takerParent);
             CanBeTaken = false;
+            _transform.position = takerParent.position;
             _transform.localRotation = _initialRotation;
             _rigidbody.freezeRotation = true;
         }
