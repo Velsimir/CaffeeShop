@@ -37,6 +37,8 @@ namespace Game.Scripts.GameLogic.CupLogic
                     cap.Take(_capHolder);
                     cap.Rigidbody.isKinematic = true;
                     HasCap = true;
+                    cap.DeactivateCollider();
+                    _paperCup.Drop();
                 }
             }
         }
@@ -45,7 +47,6 @@ namespace Game.Scripts.GameLogic.CupLogic
         {
             _isFilled = true;
             _coffee.gameObject.SetActive(true);
-            _paperCup.Drop();
         }
     }
 }

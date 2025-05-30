@@ -45,6 +45,7 @@ namespace Game.Scripts.GameLogic
                     _cupBuilder.PaperCup.Take(_cupHolder);
                     CanBeUse = true;
                     _hasCap = true;
+                    _cupBuilder.PaperCup.Rigidbody.isKinematic = true;
                 }
             }
         }

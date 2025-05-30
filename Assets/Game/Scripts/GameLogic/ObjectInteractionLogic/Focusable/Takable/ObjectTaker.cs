@@ -7,6 +7,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
     {
         [SerializeField] private Transform _takePlace;
         [SerializeField] private float _followForce = 500f;
+        
         public ITakable CurrentTakable { get; private set; }
         public bool IsHolding { get; private set; }
 
@@ -19,7 +20,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             Vector3 direction = targetPosition - CurrentTakable.Rigidbody.position;
 
             CurrentTakable.Rigidbody.linearVelocity = Vector3.zero;
-            CurrentTakable.Rigidbody.AddForce(direction * _followForce * Time.fixedDeltaTime, ForceMode.Force);
+            CurrentTakable.Rigidbody.AddForce(direction * _followForce * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
         
         public void TryTake(ITakable takable)

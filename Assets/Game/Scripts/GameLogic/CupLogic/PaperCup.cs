@@ -34,6 +34,7 @@ namespace Game.Scripts.GameLogic.CupLogic
             _transform.SetParent(null);
             CanBeTaken = true;
             _rigidbody.freezeRotation = false;
+            _rigidbody.isKinematic = false;
         }
 
         public void ActivateFocuse()

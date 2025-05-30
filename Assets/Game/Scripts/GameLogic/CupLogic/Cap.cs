@@ -9,6 +9,7 @@ namespace Game.Scripts.GameLogic.CupLogic
     {
         [SerializeField] private Transform _transform;
         [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private BoxCollider _collider;
         
         private Quaternion _initialRotation;
 
@@ -18,6 +19,11 @@ namespace Game.Scripts.GameLogic.CupLogic
         private void Awake()
         {
             _initialRotation = _transform.rotation;
+        }
+
+        private void OnEnable()
+        {
+            _collider.enabled = true;
         }
 
         public void Take(Transform takerParent)
@@ -34,6 +40,11 @@ namespace Game.Scripts.GameLogic.CupLogic
             _transform.SetParent(null);
             CanBeTaken = true;
             _rigidbody.freezeRotation = false;
+        }
+
+        public void DeactivateCollider()
+        {
+            _collider.enabled = false;
         }
 
         public void ActivateFocuse()
