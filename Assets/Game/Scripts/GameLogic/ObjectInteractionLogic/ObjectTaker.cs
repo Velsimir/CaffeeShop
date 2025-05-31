@@ -7,6 +7,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
     {
         [SerializeField] private Transform _takePlace;
         [SerializeField] private float _followForce = 500f;
+        [SerializeField] private AudioSource _audioSource;
         
         public ITakable CurrentTakable { get; private set; }
         public bool IsHolding { get; private set; }
@@ -31,6 +32,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
                 return;
             }
             
+            _audioSource.Play();
             takable.Take(_takePlace);
             CurrentTakable = takable;
             IsHolding = true;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Scripts.GameLogic.CameraLogic.Noises;
 using Game.Scripts.GameLogic.Player;
 using Unity.Cinemachine;
@@ -73,6 +74,16 @@ namespace Game.Scripts.GameLogic.CameraLogic
             
             _activeNoises.Remove(noise);
             noise.Disable();
+        }
+
+        public ICameraNoise FindNoise<TCameraNoise>() where TCameraNoise : class, ICameraNoise
+        {
+            return _activeNoises.FirstOrDefault(noise => noise is TCameraNoise);
+        }
+
+        public TCameraNoise FindNoiseOfType<TCameraNoise>() where TCameraNoise : class
+        {
+            return _activeNoises.OfType<TCameraNoise>().FirstOrDefault();
         }
     }
 }

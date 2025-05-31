@@ -1,4 +1,3 @@
-using System;
 using Game.Scripts.GameLogic.PlayerLogic;
 using UnityEngine;
 

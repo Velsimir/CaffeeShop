@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7ac08ed89d43d29f59871491344cb8, type: 3}
   m_Name: WalkNoiseSettings
   m_EditorClassIdentifier: 
-  _amplitude: 0.003
+  _amplitude: 0.005
   _frequency: 10
   _timeToReturnToStartPosition: 0.1

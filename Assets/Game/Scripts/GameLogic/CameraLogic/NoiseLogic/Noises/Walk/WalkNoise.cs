@@ -6,12 +6,16 @@ namespace Game.Scripts.GameLogic.CameraLogic.Noises
     public class WalkNoise : ICameraNoise, IPositionNoise
     {
         private readonly WalkNoiseSettings _settings;
+        private readonly Func<bool> _shouldPLay;
 
         private float _timer;
         private Vector3 _offset;
         private Vector3 _offsetVelocity;
-        
-        private readonly Func<bool> _shouldPLay;
+        private float _vertical;
+        private bool _lastStepState;
+        private bool _stepNow;
+
+        public event Action Stepped;
         
         public bool IsActive { get; private set; }
         public Vector3 Offset => _offset;
@@ -27,12 +31,15 @@ namespace Game.Scripts.GameLogic.CameraLogic.Noises
             if (_shouldPLay())
             {
                 _timer += deltaTime * _settings.Frequency;
-                float vertical = Mathf.Sin(_timer) * _settings.Amplitude;
-                _offset += new Vector3(0f, vertical, 0f);
+                _vertical = Mathf.Sin(_timer) * _settings.Amplitude;
+                _offset = new Vector3(0f, _vertical, 0f);
+                
+                SendMessageForLowestPosition();
             }
             else
             {
-                _offset = Vector3.SmoothDamp(_offset, Vector3.zero, ref _offsetVelocity, _settings.TimeToReturnToStartPosition, Mathf.Infinity, deltaTime);
+                _offset = Vector3.SmoothDamp(
+                    _offset, Vector3.zero, ref _offsetVelocity, _settings.TimeToReturnToStartPosition, Mathf.Infinity, deltaTime);
             }
         }
 
@@ -44,6 +51,18 @@ namespace Game.Scripts.GameLogic.CameraLogic.Noises
         public void Disable()
         {
             IsActive = false;
+        }
+
+        private void SendMessageForLowestPosition()
+        {
+            _stepNow = _vertical > 0;
+                
+            if (_stepNow && _lastStepState == false)
+            {
+                Stepped?.Invoke();
+            }
+                
+            _lastStepState = _stepNow;
         }
     }
 }

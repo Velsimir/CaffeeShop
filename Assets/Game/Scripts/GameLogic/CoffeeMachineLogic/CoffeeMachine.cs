@@ -10,6 +10,7 @@ namespace Game.Scripts.GameLogic
         [SerializeField] private Transform _cupHolder;
         [SerializeField] private TriggerObserver _cupTriggerObserver;
         [SerializeField] private Transform _coffeeStream;
+        [SerializeField] private AudioSource _audioSource;
 
         private bool _hasCap = false;
         private CupBuilder _cupBuilder;
@@ -75,10 +76,15 @@ namespace Game.Scripts.GameLogic
 
         private IEnumerator TurnOnCoffeeStream()
         {
+            _audioSource.Play();
+            
+            yield return new WaitForSeconds(0.1f);
+            
             _coffeeStream.gameObject.SetActive(true);
             
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(5);
            
+            _audioSource.Stop();
             _coffeeStream.gameObject.SetActive(false);
             _cupBuilder.FillCup();
             CanBeUse = false;

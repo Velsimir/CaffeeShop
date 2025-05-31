@@ -9,6 +9,7 @@ namespace Game.Scripts.GameLogic.CupLogic
         [SerializeField] private Transform _capHolder;
         [SerializeField] private TriggerObserver _capTriggerObserver;
         [SerializeField] private Transform _coffee;
+        [SerializeField] private AudioSource _audioSource;
         
         private bool _isFilled = false;
         public bool HasCap { get; private set; } = false;
@@ -33,6 +34,7 @@ namespace Game.Scripts.GameLogic.CupLogic
                 
                 if (objectTaker != null)
                 {
+                    _audioSource.Play();
                     objectTaker.Drop();
                     cap.Take(_capHolder);
                     cap.Rigidbody.isKinematic = true;
