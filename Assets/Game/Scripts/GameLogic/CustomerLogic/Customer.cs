@@ -1,24 +1,71 @@
-using Game.Scripts.GameLogic.CupLogic;
+using System;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Game.Scripts.GameLogic.CustomerLogic
 {
     [RequireComponent(typeof(Collider))]
-    public class Customer : MonoBehaviour
+    public class Customer : MonoBehaviour, ISpawnable
     {
-        private void OnCollisionEnter(Collision other)
+        [SerializeField] private NavMeshAgent _agent;
+        [SerializeField] private Transform _toBarista;
+        [SerializeField] private Transform _toExit;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private CoffeeAcepter _coffeeAcepter;
+
+        private bool _isWalking;
+
+        public event Action<ISpawnable> Disappeared;
+
+        private void Awake()
         {
-            if (other.collider.TryGetComponent(out CupBuilder capBuilder))
+            SetDestination(_toBarista.position);
+        }
+
+        private void OnEnable()
+        {
+            _coffeeAcepter.GotCoffee += GoToExit;
+        }
+
+        private void OnDisable()
+        {
+            _coffeeAcepter.GotCoffee -= GoToExit;
+        }
+
+        private void GoToExit()
+        {
+            SetDestination(_toExit.position);
+        }
+
+        private void Update()
+        {
+            if (_isWalking && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
             {
-                if (capBuilder.IsCoffeeReady)
+                if (!_agent.hasPath || _agent.velocity.sqrMagnitude == 0f)
                 {
-                    Debug.Log("Coffee ready thanx!");
-                }
-                else
-                {
-                    Debug.Log("Coffee not ready make new coffe!");
+                    ArrivedAtDestination();
                 }
             }
+        }
+
+        private void ArrivedAtDestination()
+        {
+            _isWalking = false;
+            _animator.SetBool("IsWalking", _isWalking);
+        }
+
+        private void SetDestination(Vector3 destination)
+        {
+            _agent.SetDestination(destination);
+            _isWalking = true;
+            _animator.SetBool("IsWalking", _isWalking);
+        }
+
+        public void Disappear()
+        {
+            Disappeared?.Invoke(this);
         }
     }
 }

@@ -8,5 +8,6 @@ namespace Game.Scripts.Infrastructure.Input
         public event Action<Vector2> MoveButtonsPressed;
         public event Action<Vector2> RotateMousePressed;
         public event Action InteractionButtonReleased;
+        public event Action AttackButtonReleased;
     }
 }

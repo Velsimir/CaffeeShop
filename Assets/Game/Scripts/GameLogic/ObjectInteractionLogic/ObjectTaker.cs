@@ -1,6 +1,8 @@
 using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.Infrastructure.Input;
 using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Scripts.GameLogic.ObjectInteractionLogic
 {
@@ -9,9 +11,24 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
         [SerializeField] private Transform _takePlace;
         [SerializeField] private float _followForce = 500f;
         [SerializeField] private AudioSource _audioSource;
+
+        private IInputHandler _inputHandler;
+        private Camera _camera;
         
         public ITakable CurrentTakable { get; private set; }
         public bool IsHolding { get; private set; }
+
+        [Inject]
+        private void Construct(IInputHandler inputHandler, Camera camera)
+        {
+            _inputHandler =  inputHandler;
+            _camera = camera;
+        }
+
+        private void OnEnable()
+        {
+            _inputHandler.AttackButtonReleased += Throw;
+        }
 
         private void FixedUpdate()
         {
@@ -24,7 +41,7 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
             CurrentTakable.Rigidbody.linearVelocity = Vector3.zero;
             CurrentTakable.Rigidbody.AddForce(direction * _followForce * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
-        
+
         public void TryTake(ITakable takable)
         {
             if (IsHolding == true || takable.CanBeTaken == false)
@@ -58,6 +75,18 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
             obj.Disappeared -= UnTakeCurrentObject;
             CurrentTakable = null;
             IsHolding = false;
+        }
+
+        private void Throw()
+        {
+            if (CurrentTakable == null)
+            {
+                return;
+            }
+
+            ITakable takable = CurrentTakable;
+            Drop();
+            takable.Rigidbody.AddForce(_camera.transform.forward * 10f, ForceMode.Impulse);
         }
     }
 }

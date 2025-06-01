@@ -11,6 +11,7 @@ namespace Game.Scripts.Infrastructure.Input
         public event Action<Vector2> MoveButtonsPressed;
         public event Action<Vector2> RotateMousePressed;
         public event Action InteractionButtonReleased;
+        public event Action AttackButtonReleased;
 
         public InputHandler()
         {
@@ -24,6 +25,7 @@ namespace Game.Scripts.Infrastructure.Input
             _inputSystem.Player.Look.canceled += HandleRotateDirection;
 
             _inputSystem.Player.Interact.started += HandleInteractionButton;
+            _inputSystem.Player.Attack.started += HandleAttackButton;
         }
 
         public void Dispose()
@@ -35,8 +37,14 @@ namespace Game.Scripts.Infrastructure.Input
             _inputSystem.Player.Look.canceled -= HandleRotateDirection;
         
             _inputSystem.Player.Interact.started -= HandleInteractionButton;
+            _inputSystem.Player.Attack.started -= HandleAttackButton;
         
             _inputSystem.Disable();
+        }
+
+        private void HandleAttackButton(InputAction.CallbackContext obj)
+        {
+            AttackButtonReleased?.Invoke();
         }
 
         private void HandleInteractionButton(InputAction.CallbackContext obj)
