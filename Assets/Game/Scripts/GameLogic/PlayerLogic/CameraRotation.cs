@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Scripts.GameLogic.PlayerLogic
 {
-    public class PlayerCameraRotation : IUpdatable, IDisposable
+    public class CameraRotation : IUpdatable, IDisposable
     {
         private const float MaxRotationX = 80f;
         private const float MinRotationX = -80f;
@@ -15,15 +15,17 @@ namespace Game.Scripts.GameLogic.PlayerLogic
         private readonly IInputHandler _inputHandler;
         private readonly PlayerCharacteristicData _playerCharacteristicData;
         private readonly CinemachineCamera _camera;
+        private readonly CharacterController _characterController;
         
         private Vector2 _rotateDirection;
         private float _xRotation;
         
-        public PlayerCameraRotation(IInputHandler inputHandler, PlayerCharacteristicData playerCharacteristicData, CinemachineCamera camera)
+        public CameraRotation(IInputHandler inputHandler, PlayerCharacteristicData playerCharacteristicData, CinemachineCamera camera, CharacterController characterController)
         {
             _inputHandler = inputHandler;
             _camera = camera;
             _playerCharacteristicData  = playerCharacteristicData;
+            _characterController = characterController;
             
             _inputHandler.RotateMousePressed += ReadRotateVector;
         }
@@ -42,6 +44,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             _xRotation = Mathf.Clamp(_xRotation, MinRotationX, MaxRotationX);
 
             _camera.transform.localEulerAngles = new Vector3(_xRotation, _camera.transform.localEulerAngles.y + mouseX, 0f);
+            _characterController.transform.localEulerAngles = new Vector3(0f, _camera.transform.localEulerAngles.y, 0f);
         }
 
         public void Dispose()

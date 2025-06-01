@@ -8,21 +8,21 @@ namespace Game.Scripts.GameLogic.PlayerLogic
     public class Player : MonoBehaviour
     {
         private IPlayerMovement _playerMovement;
-        private PlayerCameraRotation _playerCameraRotation;
+        private CameraRotation _cameraRotation;
         private InteractionMediator _interactionMediator;
 
         [Inject]
-        private void Construct(IPlayerMovement playerMovement, PlayerCameraRotation playerCameraRotation, InteractionMediator interactionMediator)
+        private void Construct(IPlayerMovement playerMovement, CameraRotation cameraRotation, InteractionMediator interactionMediator)
         {
             _playerMovement = playerMovement;
-            _playerCameraRotation = playerCameraRotation;
+            _cameraRotation = cameraRotation;
             _interactionMediator =  interactionMediator;
         }
 
         private void Update()
         {
             _playerMovement.Update(Time.deltaTime);
-            _playerCameraRotation.Update(Time.deltaTime);
+            _cameraRotation.Update(Time.deltaTime);
         }
     }
 }
