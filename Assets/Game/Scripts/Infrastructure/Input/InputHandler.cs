@@ -2,53 +2,56 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputHandler : IInputHandler, IDisposable
+namespace Game.Scripts.Infrastructure.Input
 {
-    private readonly InputSystem _inputSystem;
-
-    public event Action<Vector2> MoveButtonsPressed;
-    public event Action<Vector2> RotateMousePressed;
-    public event Action InteractionButtonReleased;
-
-    public InputHandler()
+    public class InputHandler : IInputHandler, IDisposable
     {
-        _inputSystem = new InputSystem();
-        _inputSystem.Enable();
+        private readonly InputSystem _inputSystem;
+
+        public event Action<Vector2> MoveButtonsPressed;
+        public event Action<Vector2> RotateMousePressed;
+        public event Action InteractionButtonReleased;
+
+        public InputHandler()
+        {
+            _inputSystem = new InputSystem();
+            _inputSystem.Enable();
         
-        _inputSystem.Player.Move.performed += HandleMovementDirection;
-        _inputSystem.Player.Move.canceled += HandleMovementDirection;
+            _inputSystem.Player.Move.performed += HandleMovementDirection;
+            _inputSystem.Player.Move.canceled += HandleMovementDirection;
 
-        _inputSystem.Player.Look.performed += HandleRotateDirection;
-        _inputSystem.Player.Look.canceled += HandleRotateDirection;
+            _inputSystem.Player.Look.performed += HandleRotateDirection;
+            _inputSystem.Player.Look.canceled += HandleRotateDirection;
 
-        _inputSystem.Player.Interact.started += HandleInteractionButton;
-    }
+            _inputSystem.Player.Interact.started += HandleInteractionButton;
+        }
 
-    public void Dispose()
-    {
-        _inputSystem.Player.Move.performed -= HandleMovementDirection;
-        _inputSystem.Player.Move.canceled -= HandleMovementDirection;
+        public void Dispose()
+        {
+            _inputSystem.Player.Move.performed -= HandleMovementDirection;
+            _inputSystem.Player.Move.canceled -= HandleMovementDirection;
         
-        _inputSystem.Player.Look.performed -= HandleRotateDirection;
-        _inputSystem.Player.Look.canceled -= HandleRotateDirection;
+            _inputSystem.Player.Look.performed -= HandleRotateDirection;
+            _inputSystem.Player.Look.canceled -= HandleRotateDirection;
         
-        _inputSystem.Player.Interact.started -= HandleInteractionButton;
+            _inputSystem.Player.Interact.started -= HandleInteractionButton;
         
-        _inputSystem.Disable();
-    }
+            _inputSystem.Disable();
+        }
 
-    private void HandleInteractionButton(InputAction.CallbackContext obj)
-    {
-        InteractionButtonReleased?.Invoke();
-    }
+        private void HandleInteractionButton(InputAction.CallbackContext obj)
+        {
+            InteractionButtonReleased?.Invoke();
+        }
 
-    private void HandleMovementDirection(InputAction.CallbackContext obj)
-    {
-        MoveButtonsPressed?.Invoke(obj.ReadValue<Vector2>());
-    }
+        private void HandleMovementDirection(InputAction.CallbackContext obj)
+        {
+            MoveButtonsPressed?.Invoke(obj.ReadValue<Vector2>());
+        }
 
-    private void HandleRotateDirection(InputAction.CallbackContext obj)
-    {
-        RotateMousePressed?.Invoke(obj.ReadValue<Vector2>());
+        private void HandleRotateDirection(InputAction.CallbackContext obj)
+        {
+            RotateMousePressed?.Invoke(obj.ReadValue<Vector2>());
+        }
     }
 }

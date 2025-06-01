@@ -1,9 +1,12 @@
 using System;
 using UnityEngine;
 
-public interface IInputHandler
+namespace Game.Scripts.Infrastructure.Input
 {
-    public event Action<Vector2> MoveButtonsPressed;
-    public event Action<Vector2> RotateMousePressed;
-    public event Action InteractionButtonReleased;
+    public interface IInputHandler
+    {
+        public event Action<Vector2> MoveButtonsPressed;
+        public event Action<Vector2> RotateMousePressed;
+        public event Action InteractionButtonReleased;
+    }
 }

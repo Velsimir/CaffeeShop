@@ -1,6 +1,4 @@
-using Game.Scripts.GameLogic.CupLogic;
-
-namespace Game.Scripts.GameLogic.PlayerLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable
 {
     public interface ITaker
     {

@@ -1,9 +1,8 @@
-using Game.Scripts.GameLogic.CameraLogic;
-using Game.Scripts.GameLogic.PlayerLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.GameLogic.Player
+namespace Game.Scripts.GameLogic.PlayerLogic
 {
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour

@@ -1,6 +1,6 @@
-using Game.Scripts.GameLogic.CameraLogic;
-using Game.Scripts.GameLogic.Player;
-using Game.Scripts.GameLogic.Player.GameData.Player;
+using Game.Scripts.GameLogic.PlayerLogic;
+using Game.Scripts.Infrastructure.GameData.Player;
+using Game.Scripts.Infrastructure.Input;
 using UnityEngine;
 using Zenject;
 

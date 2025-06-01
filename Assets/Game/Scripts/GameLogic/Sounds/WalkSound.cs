@@ -1,32 +1,36 @@
-using Game.Scripts.GameLogic.CameraLogic;
-using Game.Scripts.GameLogic.CameraLogic.Noises;
+using Game.Scripts.GameLogic.CameraLogic.NoiseLogic;
+using Game.Scripts.GameLogic.CameraLogic.NoiseLogic.Noises.Walk;
 using UnityEngine;
 
-public class WalkSound : MonoBehaviour
+namespace Game.Scripts.GameLogic.Sounds
 {
-    [SerializeField] private CameraNoiseController _cameraNoiseController;
-    [SerializeField] private AudioSource _audioSource;
-
-    private WalkNoise _walkNoise;
-
-    private void Awake()
+    public class WalkSound : MonoBehaviour
     {
-        _walkNoise = _cameraNoiseController.FindNoiseOfType<WalkNoise>();
-    }
+        [SerializeField] private CameraNoiseController _cameraNoiseController;
+        [SerializeField] private AudioSource _audioSource;
 
-    private void OnEnable()
-    {
-        _walkNoise.Stepped += TurnOnStepSound;
-    }
+        private WalkNoise _walkNoise;
+
+        private void Awake()
+        {
+            _walkNoise = _cameraNoiseController.FindNoiseOfType<WalkNoise>();
+        }
+
+        private void OnEnable()
+        {
+            _walkNoise.Stepped += TurnOnStepSound;
+        }
     
-    private void OnDisable()
-    {
-        _walkNoise.Stepped -= TurnOnStepSound;
-    }
+        private void OnDisable()
+        {
+            _walkNoise.Stepped -= TurnOnStepSound;
+        }
 
-    private void TurnOnStepSound()
-    {
-        _audioSource.pitch = Random.Range(0.9f, 1.1f);
-        _audioSource.Play();
+        private void TurnOnStepSound()
+        {
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.volume = Random.Range(0.9f, 1.1f);
+            _audioSource.Play();
+        }
     }
 }

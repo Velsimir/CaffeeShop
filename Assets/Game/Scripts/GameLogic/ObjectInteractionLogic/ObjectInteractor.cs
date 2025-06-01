@@ -1,19 +1,20 @@
 using System;
-using Game.Scripts.GameLogic.CupLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Usable;
+using Game.Scripts.Infrastructure.Input;
 
-namespace Game.Scripts.GameLogic.PlayerLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic
 {
     public class ObjectInteractor : IObjectInteractor, IFocusableVisitor, IDisposable
     {
         private readonly IInputHandler _inputHandler;
         private readonly ITaker _objectTaker;
-        private readonly IUser _objectUser;
 
-        public ObjectInteractor(IInputHandler inputHandler, ITaker objectTaker, IUser objectUser)
+        public ObjectInteractor(IInputHandler inputHandler, ITaker objectTaker)
         {
             _inputHandler = inputHandler;
             _objectTaker = objectTaker;
-            _objectUser = objectUser;
             _inputHandler.InteractionButtonReleased += TryInteract;
         }
 
@@ -45,7 +46,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
 
         public void Visit(IUsable usable)
         {
-            _objectUser.Use(usable);
+            usable.TryUse();
         }
 
         public void Dispose()

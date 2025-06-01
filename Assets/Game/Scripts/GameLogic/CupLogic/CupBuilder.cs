@@ -1,4 +1,6 @@
-using Game.Scripts.GameLogic.PlayerLogic;
+using System;
+using Game.Scripts.GameLogic.ObjectInteractionLogic;
+using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 
 namespace Game.Scripts.GameLogic.CupLogic
@@ -12,17 +14,22 @@ namespace Game.Scripts.GameLogic.CupLogic
         [SerializeField] private AudioSource _audioSource;
         
         private bool _isFilled = false;
+        private Cap _cap;
+        
         public bool HasCap { get; private set; } = false;
         public bool IsCoffeeReady => _isFilled && HasCap;
         public PaperCup PaperCup => _paperCup;
+
 
         private void OnEnable()
         {
             _capTriggerObserver.TriggerEntered += CatchCap;
         }
-        
+
         private void OnDisable()
         {
+            _cap?.Disappear();
+            gameObject.SetActive(false);
             _capTriggerObserver.TriggerEntered -= CatchCap;
         }
 
@@ -34,12 +41,13 @@ namespace Game.Scripts.GameLogic.CupLogic
                 
                 if (objectTaker != null)
                 {
+                    _cap = cap;
                     _audioSource.Play();
                     objectTaker.Drop();
-                    cap.Take(_capHolder);
-                    cap.Rigidbody.isKinematic = true;
+                    _cap.Take(_capHolder);
+                    _cap.Rigidbody.isKinematic = true;
                     HasCap = true;
-                    cap.DeactivateCollider();
+                    _cap.DeactivateCollider();
                     _paperCup.Drop();
                 }
             }
@@ -49,6 +57,15 @@ namespace Game.Scripts.GameLogic.CupLogic
         {
             _isFilled = true;
             _coffee.gameObject.SetActive(true);
+        }
+
+        public void DeactivateCoffee()
+        {
+            _isFilled = false;
+            HasCap = false;
+            _cap.Disappear();
+            _paperCup.Disappear();
+            _coffee.gameObject.SetActive(false);
         }
     }
 }

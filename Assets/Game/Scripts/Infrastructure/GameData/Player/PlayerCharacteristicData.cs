@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic.Player.GameData.Player
+namespace Game.Scripts.Infrastructure.GameData.Player
 {
     [CreateAssetMenu (fileName = "PlayerCharacteristic", menuName = "Game/Player/PlayerCharacteristicData")]
     public class PlayerCharacteristicData : ScriptableObject

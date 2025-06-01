@@ -1,4 +1,4 @@
-namespace Game.Scripts.GameLogic.CameraLogic
+namespace Game.Scripts.GameLogic.CameraLogic.NoiseLogic
 {
     public interface ICameraNoise
     {

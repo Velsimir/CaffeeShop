@@ -1,10 +1,11 @@
 using System;
-using Game.Scripts.GameLogic.Player;
-using Game.Scripts.GameLogic.Player.GameData.Player;
+using Game.Scripts.Infrastructure;
+using Game.Scripts.Infrastructure.GameData.Player;
+using Game.Scripts.Infrastructure.Input;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic.CameraLogic
+namespace Game.Scripts.GameLogic.PlayerLogic
 {
     public class PlayerCameraRotation : IUpdatable, IDisposable
     {

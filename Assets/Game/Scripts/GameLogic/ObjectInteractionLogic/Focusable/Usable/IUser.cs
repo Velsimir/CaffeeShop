@@ -1,4 +1,4 @@
-namespace Game.Scripts.GameLogic.PlayerLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Usable
 {
     public interface IUser
     {

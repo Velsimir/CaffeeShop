@@ -1,9 +1,12 @@
 using System.Collections;
 using Game.Scripts.GameLogic.CupLogic;
-using Game.Scripts.GameLogic.PlayerLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Usable;
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic
+namespace Game.Scripts.GameLogic.CoffeeMachineLogic
 {
     public class CoffeeMachine : MonoBehaviour, IUsable
     {
@@ -78,11 +81,11 @@ namespace Game.Scripts.GameLogic
         {
             _audioSource.Play();
             
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(8f);
             
             _coffeeStream.gameObject.SetActive(true);
             
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(16f);
            
             _audioSource.Stop();
             _coffeeStream.gameObject.SetActive(false);

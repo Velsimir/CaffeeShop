@@ -1,10 +1,13 @@
-using Game.Scripts.GameLogic.PlayerLogic;
+using System;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 
 namespace Game.Scripts.GameLogic.CupLogic
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Cap : MonoBehaviour, ITakable
+    public class Cap : MonoBehaviour, ITakable, ISpawnable
     {
         [SerializeField] private Transform _transform;
         [SerializeField] private Rigidbody _rigidbody;
@@ -12,12 +15,16 @@ namespace Game.Scripts.GameLogic.CupLogic
         
         private Quaternion _initialRotation;
 
+        public event Action<ISpawnable> Disappeared;
+        
         public bool CanBeTaken { get; private set; } = true;
         public Rigidbody Rigidbody => _rigidbody;
-        
+
+
         private void Awake()
         {
             _initialRotation = _transform.rotation;
+            Debug.Log(transform.position);
         }
 
         private void OnEnable()
@@ -39,6 +46,7 @@ namespace Game.Scripts.GameLogic.CupLogic
             _transform.SetParent(null);
             CanBeTaken = true;
             _rigidbody.freezeRotation = false;
+            _rigidbody.isKinematic = false;
         }
 
         public void DeactivateCollider()
@@ -57,6 +65,13 @@ namespace Game.Scripts.GameLogic.CupLogic
         public void AcceptVisitor(IFocusableVisitor focusableVisitor)
         {
             focusableVisitor.Visit(this);
+        }
+
+        public void Disappear()
+        {
+            Drop();
+            gameObject.SetActive(false);
+            Disappeared?.Invoke(this);
         }
     }
 }

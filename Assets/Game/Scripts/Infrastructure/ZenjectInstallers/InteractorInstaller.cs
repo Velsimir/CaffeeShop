@@ -1,4 +1,6 @@
-using Game.Scripts.GameLogic.PlayerLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Usable;
 using UnityEngine;
 using Zenject;
 
@@ -16,7 +18,6 @@ namespace Game.Scripts.Infrastructure.ZenjectInstallers
             Container.Bind<CenterRayInteractor>().FromInstance(_centerRayInteractor);
             Container.Bind<InteractionMediator>().AsSingle();
             Container.Bind<IObjectInteractor>().To<ObjectInteractor>().AsSingle();
-            Container.Bind<IUser>().To<ObjectUser>().AsSingle();
         }
     }
 }

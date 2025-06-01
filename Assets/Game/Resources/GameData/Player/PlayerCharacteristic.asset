@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3480319087e4d94834b21cc2ade173e, type: 3}
   m_Name: PlayerCharacteristic
   m_EditorClassIdentifier: 
-  <Speed>k__BackingField: 3
+  <Speed>k__BackingField: 1.5
   <MouseSensitivityX>k__BackingField: 0.1
   <MouseSensitivityY>k__BackingField: 0.1

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic.CameraLogic
+namespace Game.Scripts.GameLogic.CameraLogic.NoiseLogic
 {
     public interface IPositionNoise
     {

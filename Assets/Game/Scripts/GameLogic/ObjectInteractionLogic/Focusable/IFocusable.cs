@@ -1,6 +1,4 @@
-using Game.Scripts.GameLogic.PlayerLogic;
-
-namespace Game.Scripts.GameLogic.CupLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable
 {
     public interface IFocusable
     {

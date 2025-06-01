@@ -1,7 +1,8 @@
-using Game.Scripts.GameLogic.CupLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic.PlayerLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic
 {
     public class ObjectTaker : MonoBehaviour, ITaker
     {
@@ -35,6 +36,7 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             _audioSource.Play();
             takable.Take(_takePlace);
             CurrentTakable = takable;
+            takable.Disappeared += UnTakeCurrentObject;
             IsHolding = true;
         }
 
@@ -47,6 +49,13 @@ namespace Game.Scripts.GameLogic.PlayerLogic
             }
             
             CurrentTakable.Drop();
+            CurrentTakable = null;
+            IsHolding = false;
+        }
+
+        private void UnTakeCurrentObject(ISpawnable obj)
+        {
+            obj.Disappeared -= UnTakeCurrentObject;
             CurrentTakable = null;
             IsHolding = false;
         }

@@ -1,9 +1,9 @@
 using System;
-using Game.Scripts.GameLogic.CupLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.GameLogic.PlayerLogic
+namespace Game.Scripts.GameLogic.ObjectInteractionLogic
 {
     public class CenterRayInteractor : MonoBehaviour
     {

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Scripts.GameLogic.CameraLogic.Noises;
-using Game.Scripts.GameLogic.Player;
+using Game.Scripts.GameLogic.PlayerLogic;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.GameLogic.CameraLogic
+namespace Game.Scripts.GameLogic.CameraLogic.NoiseLogic
 {
     public class CameraNoiseController : MonoBehaviour
     {

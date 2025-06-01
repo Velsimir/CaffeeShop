@@ -1,4 +1,4 @@
-namespace Game.Scripts.GameLogic.Player
+namespace Game.Scripts.Infrastructure
 {
     public interface IUpdatable
     {

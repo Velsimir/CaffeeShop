@@ -1,5 +1,7 @@
 using System;
-using Game.Scripts.GameLogic.PlayerLogic;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable;
+using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
+using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 
 namespace Game.Scripts.GameLogic.CupLogic
@@ -12,19 +14,23 @@ namespace Game.Scripts.GameLogic.CupLogic
         
         private Quaternion _initialRotation;
 
+        public event Action<ISpawnable> Disappeared;
+        
         public bool CanBeTaken { get; private set; } = true;
         public Rigidbody Rigidbody => _rigidbody;
+
 
         private void Awake()
         {
             _initialRotation = _transform.rotation;
+            Debug.Log(transform.position);
         }
 
         public void Take(Transform takerParent)
         {
             _transform.SetParent(takerParent);
-            CanBeTaken = false;
             _transform.position = takerParent.position;
+            CanBeTaken = false;
             _transform.localRotation = _initialRotation;
             _rigidbody.freezeRotation = true;
         }
@@ -48,6 +54,13 @@ namespace Game.Scripts.GameLogic.CupLogic
         public void AcceptVisitor(IFocusableVisitor focusableVisitor)
         {
             focusableVisitor.Visit(this);
+        }
+
+        public void Disappear()
+        {
+            Drop();
+            gameObject.SetActive(false);
+            Disappeared?.Invoke(this);
         }
     }
 }

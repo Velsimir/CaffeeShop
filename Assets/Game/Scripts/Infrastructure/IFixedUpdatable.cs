@@ -1,4 +1,7 @@
-public interface IFixedUpdatable
+namespace Game.Scripts.Infrastructure
 {
-    public void FixedUpdate(float fixedDeltaTime);
+    public interface IFixedUpdatable
+    {
+        public void FixedUpdate(float fixedDeltaTime);
+    }
 }

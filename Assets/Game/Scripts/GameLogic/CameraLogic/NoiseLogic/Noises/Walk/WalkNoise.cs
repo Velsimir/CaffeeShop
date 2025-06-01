@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Game.Scripts.GameLogic.CameraLogic.Noises
+namespace Game.Scripts.GameLogic.CameraLogic.NoiseLogic.Noises.Walk
 {
     public class WalkNoise : ICameraNoise, IPositionNoise
     {
