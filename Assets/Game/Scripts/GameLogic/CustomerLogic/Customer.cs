@@ -1,5 +1,4 @@
 using System;
-using Game.Scripts.GameLogic.ObjectInteractionLogic.Focusable.Takable;
 using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,38 +6,35 @@ using UnityEngine.AI;
 namespace Game.Scripts.GameLogic.CustomerLogic
 {
     [RequireComponent(typeof(Collider))]
-    public class Customer : MonoBehaviour, ISpawnable
+    public class Customer : MonoBehaviour, ICustomer
     {
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private Transform _toBarista;
         [SerializeField] private Transform _toExit;
         [SerializeField] private Animator _animator;
-        [SerializeField] private CoffeeAccepter _coffeeAccepter;
+        [SerializeField] private CoffeeAcceptor _coffeeAcceptor;
 
         private bool _isWalking;
 
         public event Action<ISpawnable> Disappeared;
         
         public MonoBehaviour MonoBehaviour => this;
-
-        private void Awake()
-        {
-            SetDestination(_toBarista.position);
-        }
+        public bool IsServed { get; private set; }
 
         private void OnEnable()
         {
-            _coffeeAccepter.GotCoffee += GoToExit;
+            _coffeeAcceptor.GotCoffee += GoToExit;
         }
 
         private void OnDisable()
         {
-            _coffeeAccepter.GotCoffee -= GoToExit;
+            _coffeeAcceptor.GotCoffee -= GoToExit;
         }
 
         private void GoToExit()
         {
             SetDestination(_toExit.position);
+            IsServed = true;
         }
 
         private void Update()
@@ -50,6 +46,14 @@ namespace Game.Scripts.GameLogic.CustomerLogic
                     ArrivedAtDestination();
                 }
             }
+        }
+
+        public void SetDestinations(Transform baristaTable, Transform exit)
+        {
+            _toBarista = baristaTable;
+            _toExit = exit;
+            
+            SetDestination(_toBarista.position);
         }
 
         private void ArrivedAtDestination()
@@ -67,6 +71,7 @@ namespace Game.Scripts.GameLogic.CustomerLogic
 
         public void Disappear()
         {
+            IsServed = false;
             Disappeared?.Invoke(this);
         }
     }
