@@ -1,4 +1,5 @@
 using Game.Scripts.GameLogic.ObjectInteractionLogic;
+using Game.Scripts.Infrastructure.Input;
 using UnityEngine;
 using Zenject;
 
@@ -12,11 +13,12 @@ namespace Game.Scripts.GameLogic.PlayerLogic
         private InteractionMediator _interactionMediator;
 
         [Inject]
-        private void Construct(IPlayerMovement playerMovement, CameraRotation cameraRotation, InteractionMediator interactionMediator)
+        private void Construct(IPlayerMovement playerMovement, CameraRotation cameraRotation,
+            InteractionMediator interactionMediator)
         {
             _playerMovement = playerMovement;
             _cameraRotation = cameraRotation;
-            _interactionMediator =  interactionMediator;
+            _interactionMediator = interactionMediator;
         }
 
         private void Update()

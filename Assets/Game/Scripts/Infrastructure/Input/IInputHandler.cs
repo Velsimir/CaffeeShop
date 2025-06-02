@@ -9,5 +9,8 @@ namespace Game.Scripts.Infrastructure.Input
         public event Action<Vector2> RotateMousePressed;
         public event Action InteractionButtonReleased;
         public event Action AttackButtonReleased;
+
+        public void Deactivate();
+        public void Activate();
     }
 }

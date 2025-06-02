@@ -16,6 +16,12 @@ namespace Game.Scripts.Infrastructure.Input
         public InputHandler()
         {
             _inputSystem = new InputSystem();
+
+            Activate();
+        }
+
+        public void Activate()
+        {
             _inputSystem.Enable();
         
             _inputSystem.Player.Move.performed += HandleMovementDirection;
@@ -28,7 +34,7 @@ namespace Game.Scripts.Infrastructure.Input
             _inputSystem.Player.Attack.started += HandleAttackButton;
         }
 
-        public void Dispose()
+        public void Deactivate()
         {
             _inputSystem.Player.Move.performed -= HandleMovementDirection;
             _inputSystem.Player.Move.canceled -= HandleMovementDirection;
@@ -40,6 +46,11 @@ namespace Game.Scripts.Infrastructure.Input
             _inputSystem.Player.Attack.started -= HandleAttackButton;
         
             _inputSystem.Disable();
+        }
+
+        public void Dispose()
+        {
+            Deactivate();
         }
 
         private void HandleAttackButton(InputAction.CallbackContext obj)
