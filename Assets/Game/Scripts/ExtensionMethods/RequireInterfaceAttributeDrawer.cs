@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Game.Scripts.ExtensionMethods
 {
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(RequireInterfaceAttribute))]
-    
     public class RequireInterfaceAttributeDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -29,4 +29,5 @@ namespace Game.Scripts.ExtensionMethods
             EditorGUI.EndProperty();
         }    
     }
+#endif
 }

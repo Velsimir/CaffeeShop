@@ -20,6 +20,7 @@ namespace Game.Scripts.GameLogic.CustomerLogic
         private int _countCustomers;
         private ISpawnerService<ICustomer> _spawnerService;
         private CutsceneManager _cutsceneManager;
+        public bool IsEnded => _countCustomers >= _maxCustomers;
 
         [Inject]
         private void Construct(CutsceneManager cutsceneManager)

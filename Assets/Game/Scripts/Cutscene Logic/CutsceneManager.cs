@@ -88,5 +88,6 @@ public struct CutsceneStruct
 public enum Cutscenes
 {
     StartGame,
-    Customer
+    Customer,
+    Final
 }
