@@ -2,6 +2,7 @@ using System;
 using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
 using UnityEngine.AI;
+using Zenject;
 
 namespace Game.Scripts.GameLogic.CustomerLogic
 {
@@ -15,8 +16,8 @@ namespace Game.Scripts.GameLogic.CustomerLogic
         [SerializeField] private CoffeeAcceptor _coffeeAcceptor;
 
         private bool _isWalking;
-
         public event Action<ISpawnable> Disappeared;
+        public event Action<ICustomer>  ReachedCoffeePoint;
         
         public MonoBehaviour MonoBehaviour => this;
         public bool IsServed { get; private set; }
@@ -44,6 +45,11 @@ namespace Game.Scripts.GameLogic.CustomerLogic
                 if (!_agent.hasPath || _agent.velocity.sqrMagnitude == 0f)
                 {
                     ArrivedAtDestination();
+
+                    if (IsServed == false)
+                    {
+                        ReachedCoffeePoint?.Invoke(this);
+                    }
                 }
             }
         }

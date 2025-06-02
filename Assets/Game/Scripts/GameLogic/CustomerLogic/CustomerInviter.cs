@@ -2,6 +2,7 @@ using System.Collections;
 using Game.Scripts.ExtensionMethods;
 using Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Scripts.GameLogic.CustomerLogic
 {
@@ -13,27 +14,49 @@ namespace Game.Scripts.GameLogic.CustomerLogic
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private Transform _baristaTable;
         [SerializeField] private Transform _exit;
-        
+
+        private readonly int _maxCustomers = 2;
+
+        private int _countCustomers;
         private ISpawnerService<ICustomer> _spawnerService;
+        private CutsceneManager _cutsceneManager;
+
+        [Inject]
+        private void Construct(CutsceneManager cutsceneManager)
+        {
+            _cutsceneManager = cutsceneManager;
+        }
 
         private void Awake()
         {
             _spawnerService = new SpawnerService<ICustomer>((ICustomer)_customer);
-            InviteNewCustomer();
+            StartCoroutine(WaitDelay());
         }
 
         private void InviteNewCustomer()
         {
-            ICustomer customer = _spawnerService.Spawn(transform);
-            customer.SetDestinations(_baristaTable, _exit);
-            customer.Disappeared += SpawnWithDelay;
             MakeSound();
+
+            if (_countCustomers < _maxCustomers)
+            {
+                ICustomer customer = _spawnerService.Spawn(transform);
+                customer.SetDestinations(_baristaTable, _exit);
+                customer.Disappeared += SpawnWithDelay;
+                customer.ReachedCoffeePoint += ShowCutScene;
+                _countCustomers++;
+            }
+        }
+
+        private void ShowCutScene(ICustomer obj)
+        {
+            obj.ReachedCoffeePoint -= ShowCutScene;
+            _cutsceneManager.StartCutscene(Cutscenes.Customer);
         }
 
         private void SpawnWithDelay(ISpawnable spawnable)
         {
+            MakeSound();
             spawnable.Disappeared -= SpawnWithDelay;
-
             StartCoroutine(WaitDelay());
         }
 

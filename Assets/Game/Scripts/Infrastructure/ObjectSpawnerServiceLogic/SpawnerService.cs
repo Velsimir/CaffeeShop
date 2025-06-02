@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
@@ -9,14 +11,19 @@ namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
     {
         private readonly ObjectPoolService<TSpawnableObjet> _pool;
 
-        public SpawnerService(TSpawnableObjet prefab, Transform container = null)
+        public SpawnerService(TSpawnableObjet prefab, Transform container = null, DiContainer diContainer = null)
         {
-            _pool = new ObjectPoolService<TSpawnableObjet>(prefab, container);
+            _pool = new ObjectPoolService<TSpawnableObjet>(prefab, container, diContainer);
+        }
+
+        public TSpawnableObjet Spawn(Transform spawnPoint)
+        {
+            return Spawn(spawnPoint.position, spawnPoint.rotation);
         }
 
         public TSpawnableObjet Spawn(Vector3 position, Quaternion rotation)
         {
-            TSpawnableObjet instance = _pool.Get();
+            TSpawnableObjet instance = _pool.Get(position);
             instance.MonoBehaviour.transform.SetPositionAndRotation(position, rotation);
             return instance;
         }
@@ -27,13 +34,7 @@ namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
             var instance = Spawn(position, rotation);
             return instance as TInterface;
         }
-
-        public TSpawnableObjet Spawn(Transform spawnPoint)
-        {
-            return Spawn(spawnPoint.position, spawnPoint.rotation);
-        }
-
-
+        
         public TInterface SpawnAs<TInterface>(Transform spawnPoint)
             where TInterface : class, ISpawnable
         {
@@ -45,15 +46,17 @@ namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
         {
             private readonly TSpawnable _prefab;
             private readonly Transform _container;
+            private DiContainer _diContainer;
             private readonly List<TSpawnable> _available = new();
 
-            public ObjectPoolService(TSpawnable prefab, Transform container = null)
+            public ObjectPoolService(TSpawnable prefab, Transform container = null, DiContainer diContainer = null)
             {
                 _prefab = prefab;
                 _container = container;
+                _diContainer = diContainer;
             }
 
-            public TSpawnable Get()
+            public TSpawnable Get(Vector3 position)
             {
                 TSpawnable instance;
 
@@ -64,7 +67,7 @@ namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
                 }
                 else
                 {
-                    instance = InstantiateFromPrefab();
+                    instance = InstantiateFromPrefab(position);
                     instance.Disappeared += ReturnToPool;
                 }
 
@@ -81,10 +84,20 @@ namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
                 }
             }
             
-            private TSpawnable InstantiateFromPrefab()
+            private TSpawnable InstantiateFromPrefab(Vector3 position)
             {
-                var obj = Object.Instantiate(_prefab.MonoBehaviour, _container);
-                return obj.GetComponent<TSpawnable>();
+                GameObject obj;
+                
+                if (_diContainer != null)
+                {
+                    obj = _diContainer.InstantiatePrefab(_prefab.MonoBehaviour.gameObject, position, _prefab.MonoBehaviour.transform.rotation, _container);
+                }
+                else
+                {
+                    obj = Object.Instantiate(_prefab.MonoBehaviour.gameObject, position, _prefab.MonoBehaviour.transform.rotation, _container);
+                }
+
+                return obj.GameObject().GetComponent<TSpawnable>();
             }
         }
     }

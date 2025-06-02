@@ -26,11 +26,6 @@ namespace Game.Scripts.GameLogic.CupLogic
             _initialRotation = _transform.rotation;
         }
 
-        private void OnCollisionEnter(Collision other)
-        {
-            
-        }
-
         public void Take(Transform takerParent)
         {
             _transform.SetParent(takerParent);

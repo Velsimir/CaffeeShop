@@ -44,6 +44,9 @@ namespace Game.Scripts.Infrastructure.Input
         
             _inputSystem.Player.Interact.started -= HandleInteractionButton;
             _inputSystem.Player.Attack.started -= HandleAttackButton;
+            
+            MoveButtonsPressed?.Invoke(Vector2.zero);
+            RotateMousePressed?.Invoke(Vector2.zero);
         
             _inputSystem.Disable();
         }

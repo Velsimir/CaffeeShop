@@ -5,6 +5,7 @@ using UnityEngine;
 public class CoffeeAcceptor : MonoBehaviour
 {
     public event Action GotCoffee;
+    public static event Action<Vector3> CoffeeSold;
     
     private void OnCollisionEnter(Collision other)
     {
@@ -14,6 +15,7 @@ public class CoffeeAcceptor : MonoBehaviour
             {
                 cupBuilder.DeactivateCoffee();
                 GotCoffee?.Invoke();
+                CoffeeSold?.Invoke(other.contacts[0].point);
             }
             else
             {

@@ -36,7 +36,7 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
         {
             if (_objectTaker.IsHolding)
             {
-                _objectTaker.Drop();
+                _objectTaker.Throw();
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
         {
             if (_objectTaker.IsHolding && CurrentFocusable == null)
             {
-                _objectTaker.Drop();
+                _objectTaker.Throw();
                 return;
             }
 

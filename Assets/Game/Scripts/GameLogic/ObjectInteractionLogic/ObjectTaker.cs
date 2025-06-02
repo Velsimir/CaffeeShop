@@ -16,6 +16,7 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
         private Camera _camera;
         
         public ITakable CurrentTakable { get; private set; }
+        public Transform HoldPoint => _takePlace;
         public bool IsHolding { get; private set; }
 
         [Inject]
@@ -23,11 +24,6 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
         {
             _inputHandler =  inputHandler;
             _camera = camera;
-        }
-
-        private void OnEnable()
-        {
-            _inputHandler.AttackButtonReleased += Throw;
         }
 
         private void FixedUpdate()
@@ -77,7 +73,7 @@ namespace Game.Scripts.GameLogic.ObjectInteractionLogic
             IsHolding = false;
         }
 
-        private void Throw()
+        public void Throw()
         {
             if (CurrentTakable == null)
             {

@@ -43,6 +43,11 @@ namespace Game.Scripts.GameLogic.CupLogic
 
         public void Drop()
         {
+            if (_transform == null)
+            {
+                return;
+            }
+            
             _transform.SetParent(null);
             CanBeTaken = true;
             _rigidbody.freezeRotation = false;
