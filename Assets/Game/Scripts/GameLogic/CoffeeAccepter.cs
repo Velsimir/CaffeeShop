@@ -2,7 +2,7 @@ using System;
 using Game.Scripts.GameLogic.CupLogic;
 using UnityEngine;
 
-public class CoffeeAcepter : MonoBehaviour
+public class CoffeeAccepter : MonoBehaviour
 {
     public event Action GotCoffee;
     

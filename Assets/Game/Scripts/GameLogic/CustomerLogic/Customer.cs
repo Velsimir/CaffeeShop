@@ -13,11 +13,13 @@ namespace Game.Scripts.GameLogic.CustomerLogic
         [SerializeField] private Transform _toBarista;
         [SerializeField] private Transform _toExit;
         [SerializeField] private Animator _animator;
-        [SerializeField] private CoffeeAcepter _coffeeAcepter;
+        [SerializeField] private CoffeeAccepter _coffeeAccepter;
 
         private bool _isWalking;
 
         public event Action<ISpawnable> Disappeared;
+        
+        public MonoBehaviour MonoBehaviour => this;
 
         private void Awake()
         {
@@ -26,12 +28,12 @@ namespace Game.Scripts.GameLogic.CustomerLogic
 
         private void OnEnable()
         {
-            _coffeeAcepter.GotCoffee += GoToExit;
+            _coffeeAccepter.GotCoffee += GoToExit;
         }
 
         private void OnDisable()
         {
-            _coffeeAcepter.GotCoffee -= GoToExit;
+            _coffeeAccepter.GotCoffee -= GoToExit;
         }
 
         private void GoToExit()

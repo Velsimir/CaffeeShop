@@ -5,82 +5,86 @@ using Object = UnityEngine.Object;
 namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
 {
     public class SpawnerService<TSpawnableObjet> : ISpawnerService<TSpawnableObjet>
-        where TSpawnableObjet : MonoBehaviour, ISpawnable
+        where TSpawnableObjet : ISpawnable
     {
-         private readonly TSpawnableObjet _spawnablePrefab;
-        private readonly ObjectPoolService _poolService;
+        private readonly ObjectPoolService<TSpawnableObjet> _pool;
 
-        public SpawnerService(TSpawnableObjet spawnablePrefab)
+        public SpawnerService(TSpawnableObjet prefab, Transform container = null)
         {
-            _spawnablePrefab = spawnablePrefab;
-            _poolService = new ObjectPoolService();
+            _pool = new ObjectPoolService<TSpawnableObjet>(prefab, container);
         }
 
-        public TSpawnableObjet Spawn()
+        public TSpawnableObjet Spawn(Vector3 position, Quaternion rotation)
         {
-            TSpawnableObjet spawnableObjet;
-
-            if (_poolService.HasFree)
-            {
-                spawnableObjet = _poolService.Get();
-            }
-            else
-            {
-                spawnableObjet = Object.Instantiate(_spawnablePrefab);
-                _poolService.Track(spawnableObjet);
-            }
-
-            spawnableObjet.gameObject.SetActive(true);
-
-            return spawnableObjet;
+            TSpawnableObjet instance = _pool.Get();
+            instance.MonoBehaviour.transform.SetPositionAndRotation(position, rotation);
+            return instance;
         }
 
-        public TSpawnableObjet Spawn(Transform at)
+        public TInterface SpawnAs<TInterface>(Vector3 position, Quaternion rotation)
+            where TInterface : class, ISpawnable
         {
-            TSpawnableObjet spawnableObjet;
-
-            if (_poolService.HasFree)
-            {
-                spawnableObjet = _poolService.Get();
-            }
-            else
-            {
-                spawnableObjet = Object.Instantiate(_spawnablePrefab, at.position, _spawnablePrefab.transform.rotation);
-                _poolService.Track(spawnableObjet);
-            }
-
-            spawnableObjet.transform.position = at.position;
-            spawnableObjet.gameObject.SetActive(true);
-
-            return spawnableObjet;
+            var instance = Spawn(position, rotation);
+            return instance as TInterface;
         }
 
-        private class ObjectPoolService
+        public TSpawnableObjet Spawn(Transform spawnPoint)
         {
-            private readonly List<TSpawnableObjet> _pool = new List<TSpawnableObjet>();
+            return Spawn(spawnPoint.position, spawnPoint.rotation);
+        }
 
-            public bool HasFree => _pool.Count > 0;
 
-            public TSpawnableObjet Get()
+        public TInterface SpawnAs<TInterface>(Transform spawnPoint)
+            where TInterface : class, ISpawnable
+        {
+            return SpawnAs<TInterface>(spawnPoint.position, spawnPoint.rotation);
+        }
+
+
+        private class ObjectPoolService<TSpawnable> where TSpawnable : ISpawnable
+        {
+            private readonly TSpawnable _prefab;
+            private readonly Transform _container;
+            private readonly List<TSpawnable> _available = new();
+
+            public ObjectPoolService(TSpawnable prefab, Transform container = null)
             {
-                TSpawnableObjet spawnableObjet = _pool[0];
-                _pool.Remove(spawnableObjet);
-                spawnableObjet.Disappeared += Add;
-                return spawnableObjet;
+                _prefab = prefab;
+                _container = container;
             }
 
-            public void Track(TSpawnableObjet newObject)
+            public TSpawnable Get()
             {
-                newObject.Disappeared += Add;
-            }
+                TSpawnable instance;
 
-            private void Add(ISpawnable takenObject)
-            {
-                if (takenObject is TSpawnableObjet spawnableObjet)
+                if (_available.Count > 0)
                 {
-                    _pool.Add(spawnableObjet);
-                    spawnableObjet.Disappeared -= Add;
+                    instance = _available[0];
+                    _available.RemoveAt(0);
                 }
+                else
+                {
+                    instance = InstantiateFromPrefab();
+                    instance.Disappeared += ReturnToPool;
+                }
+
+                instance.MonoBehaviour.gameObject.SetActive(true);
+                return instance;
+            }
+
+            private void ReturnToPool(ISpawnable spawnable)
+            {
+                if (spawnable is TSpawnable t)
+                {
+                    t.MonoBehaviour.gameObject.SetActive(false);
+                    _available.Add(t);
+                }
+            }
+            
+            private TSpawnable InstantiateFromPrefab()
+            {
+                var obj = Object.Instantiate(_prefab.MonoBehaviour, _container);
+                return obj.GetComponent<TSpawnable>();
             }
         }
     }

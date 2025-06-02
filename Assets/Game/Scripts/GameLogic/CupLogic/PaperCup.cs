@@ -18,12 +18,12 @@ namespace Game.Scripts.GameLogic.CupLogic
         
         public bool CanBeTaken { get; private set; } = true;
         public Rigidbody Rigidbody => _rigidbody;
+        public MonoBehaviour MonoBehaviour => this;
 
 
         private void Awake()
         {
             _initialRotation = _transform.rotation;
-            Debug.Log(transform.position);
         }
 
         public void Take(Transform takerParent)

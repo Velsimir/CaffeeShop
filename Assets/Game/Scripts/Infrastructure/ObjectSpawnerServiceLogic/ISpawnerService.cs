@@ -2,9 +2,16 @@ using UnityEngine;
 
 namespace Game.Scripts.Infrastructure.ObjectSpawnerServiceLogic
 {
-    public interface ISpawnerService<TSpawnableObjet> where TSpawnableObjet : MonoBehaviour, ISpawnable
+    public interface ISpawnerService<TSpawnableObjet> where TSpawnableObjet : ISpawnable
     {
-        TSpawnableObjet Spawn();
-        TSpawnableObjet Spawn(Transform at);
+        public TSpawnableObjet Spawn(Vector3 position, Quaternion rotation);
+
+        public TInterface SpawnAs<TInterface>(Vector3 position, Quaternion rotation)
+            where TInterface : class, ISpawnable;
+
+        public TSpawnableObjet Spawn(Transform spawnPoint);
+
+        public TInterface SpawnAs<TInterface>(Transform spawnPoint)
+            where TInterface : class, ISpawnable;
     }
 }
